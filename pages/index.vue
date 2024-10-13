@@ -55,6 +55,7 @@ useSeoMeta({
     ogTitle: 'Toontown Rewritten Race Tracker',
     description: 'A website to track Toontown Rewritten racing scores.',
     ogDescription: 'A website to track Toontown Rewritten racing scores.',
+    author: 'Glomatico',
 })
 const districtsData = ref<string[]>([])
 const raceTypesData = ref<string[]>([])
