@@ -6,16 +6,17 @@
             <v-container>
                 <v-row class="ga-4 my-4">
                     <v-select class="w-25" :label="`District`" :items="districtItems"
-                        v-model:model-value='selectedDistrict' @update:model-value="setRaceTypeItems()">
+                        v-model:model-value='selectedDistrict' @update:model-value="onDistrictChange()">
                     </v-select>
                     <v-select class="w-25" :label="`Race type`" :disabled="raceTypeDisabled" :items="raceTypeItems"
-                        v-model:model-value='selectedRaceType' @update:model-value="setLeaderboardByDistrict()">
+                        v-model:model-value='selectedRaceType' @update:model-value="onRaceTypeChange()">
                     </v-select>
                 </v-row>
-                <RaceLeaderboardByDistrict :race-leaderboard-by-district-items="raceLeaderboardByDistrictItems"
-                    :race-leaderboard-by-district-show="raceLeaderboardByDistrictShow"></RaceLeaderboardByDistrict>
-                <RaceLeaderboardGlobal :race-leaderboard-global-items="raceLeaderboardGlobalItems"
-                    :race-leaderboard-global-show="raceLeaderboardGlobalShow"></RaceLeaderboardGlobal>
+                <RaceLeaderboardByDistrict :items="raceLeaderboardByDistrictItems"
+                    :visible="raceLeaderboardByDistrictShow">
+                </RaceLeaderboardByDistrict>
+                <RaceLeaderboardGlobal :items="raceLeaderboardGlobalItems" :visible="raceLeaderboardGlobalShow">
+                </RaceLeaderboardGlobal>
             </v-container>
         </v-main>
         <v-footer :color="`#1a5493`">
@@ -73,39 +74,38 @@ async function setDistrictItems() {
     districtItems.value.push(...Object.keys(races.all_time).sort())
 }
 
-async function setRaceTypeItems() {
-    selectedRaceType.value = raceTypeItems.value[0]
+async function onDistrictChange() {
     raceTypeDisabled.value = false
-    if (selectedDistrict.value === 'Global') {
-        raceLeaderboardGlobalShow.value = true
-        raceLeaderboardByDistrictShow.value = false
-        await setLeaderboardGlobalItems()
-    } else {
-        raceLeaderboardByDistrictShow.value = true
-        raceLeaderboardGlobalShow.value = false
-        await setLeaderboardByDistrictItems()
-    }
+    selectedRaceType.value = raceTypeItems.value[0]
+    await setLeaderboard()
 }
 
-async function setLeaderboardByDistrict() {
+async function onRaceTypeChange() {
+    await setLeaderboard()
+}
+
+async function setLeaderboard() {
     if (selectedDistrict.value === 'Global') {
         await setLeaderboardGlobalItems()
+        raceLeaderboardGlobalShow.value = true
+        raceLeaderboardByDistrictShow.value = false
     } else {
         await setLeaderboardByDistrictItems()
+        raceLeaderboardByDistrictShow.value = true
+        raceLeaderboardGlobalShow.value = false
     }
 }
 
 async function setLeaderboardByDistrictItems() {
-    const items = races.all_time[selectedDistrict.value][selectedRaceType.value].map((element: any[]) => ({
+    raceLeaderboardByDistrictItems.value = races.all_time[selectedDistrict.value][selectedRaceType.value].map((element: any[]) => ({
         toonName: element[0],
         toonDna: element[1],
         raceTime: element[2]
     }))
-    raceLeaderboardByDistrictItems.value = items
 }
 
 async function setLeaderboardGlobalItems() {
-    const items = Object.keys(races.all_time)
+    raceLeaderboardGlobalItems.value = Object.keys(races.all_time)
         .sort()
         .flatMap(district =>
             (races.all_time[district][selectedRaceType.value] || []).map(
@@ -117,10 +117,7 @@ async function setLeaderboardGlobalItems() {
                 })
             )
         )
-    raceLeaderboardGlobalItems.value = items
 }
-
-
 
 onMounted(async () => {
     await setRaces()

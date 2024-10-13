@@ -7,7 +7,7 @@
         title: 'Race time',
         key: 'raceTime',
     }
-    ]" :items="raceLeaderboardByDistrictItems" v-show="raceLeaderboardByDistrictShow">
+    ]" :sort-by="[{ key: 'raceTime', order: 'asc' }]" :items="items" v-if="visible">
         <template #item="{ item }">
             <tr>
                 <td>
@@ -25,10 +25,10 @@
 
 <script lang="ts" setup>
 const props = defineProps<{
-    raceLeaderboardByDistrictItems: any[],
-    raceLeaderboardByDistrictShow: boolean,
+    items: any[],
+    visible: boolean,
 }>()
-const { raceLeaderboardByDistrictItems, raceLeaderboardByDistrictShow } = toRefs(props)
+const { items, visible } = toRefs(props)
 </script>
 
 <style></style>
