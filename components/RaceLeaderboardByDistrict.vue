@@ -7,7 +7,7 @@
         title: 'Race time',
         key: 'raceTime',
     }
-    ]" height="576" :items="raceLeaderboardByDistrictItems" v-show="raceLeaderboardByDistrictShow">
+    ]" :items="raceLeaderboardByDistrictItems" v-show="raceLeaderboardByDistrictShow">
         <template #item="{ item }">
             <tr>
                 <td>

@@ -11,7 +11,7 @@
         title: 'Race time',
         key: 'raceTime',
     }
-    ]" height="576" :items="raceLeaderboardGlobalItems" v-show="raceLeaderboardGlobalShow">
+    ]" :items="raceLeaderboardGlobalItems" v-show="raceLeaderboardGlobalShow">
         <template #item="{ item }">
             <tr>
                 <td>
