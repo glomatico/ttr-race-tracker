@@ -14,8 +14,8 @@
                 </v-row>
                 <RaceLeaderboardByDistrict :race-leaderboard-by-district-items="raceLeaderboardByDistrictItems"
                     :race-leaderboard-by-district-show="raceLeaderboardByDistrictShow"></RaceLeaderboardByDistrict>
-                <RaceLeaderboardGlobal :race-leaderboard-by-district-items="raceLeaderboardGlobalItems"
-                    :race-leaderboard-by-district-show="raceLeaderboardGlobalShow"></RaceLeaderboardGlobal>
+                <RaceLeaderboardGlobal :race-leaderboard-global-items="raceLeaderboardGlobalItems"
+                    :race-leaderboard-global-show="raceLeaderboardGlobalShow"></RaceLeaderboardGlobal>
             </v-container>
         </v-main>
         <v-footer :color="`#1a5493`">

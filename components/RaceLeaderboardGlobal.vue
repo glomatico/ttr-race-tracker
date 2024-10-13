@@ -32,10 +32,10 @@
 
 <script lang="ts" setup>
 const props = defineProps<{
-    raceLeaderboardByDistrictItems: any[],
-    raceLeaderboardByDistrictShow: boolean,
+    raceLeaderboardGlobalItems: any[],
+    raceLeaderboardGlobalShow: boolean,
 }>()
-const { raceLeaderboardByDistrictItems: raceLeaderboardGlobalItems, raceLeaderboardByDistrictShow: raceLeaderboardGlobalShow } = toRefs(props)
+const { raceLeaderboardGlobalItems, raceLeaderboardGlobalShow } = toRefs(props)
 </script>
 
 <style></style>
