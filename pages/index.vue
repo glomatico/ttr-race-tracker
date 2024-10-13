@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar :title="`TTR Race Tracker`" :color="`#1a5493`">
+        <v-app-bar :title="`Toontown Rewritten Race Tracker`" :color="`#1a5493`">
         </v-app-bar>
         <v-main>
             <v-container>
@@ -40,6 +40,12 @@
 </template>
 
 <script lang="ts" setup>
+useSeoMeta({
+    title: 'Toontown Rewritten Race Tracker',
+    ogTitle: 'Toontown Rewritten Race Tracker',
+    description: 'A website to track Toontown Rewritten racing scores.',
+    ogDescription: 'A website to track Toontown Rewritten racing scores.',
+})
 const districtsData = ref<string[]>([])
 const raceTypesData = ref<string[]>([])
 const raceTypesDisabled = ref<boolean>(true)
