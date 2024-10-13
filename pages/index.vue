@@ -27,6 +27,7 @@ useSeoMeta({
     ogDescription: 'A website to track Toontown Rewritten racing scores.',
     author: 'Glomatico',
 })
+
 const districtItems = ref<string[]>(['Global'])
 const raceTypeItems = ref<string[]>([
     'Airborne Acres',

@@ -16,7 +16,6 @@
             </v-container>
         </v-footer>
     </v-app>
-
 </template>
 
 <script lang="ts" setup>
