@@ -79,32 +79,33 @@ async function setRaceTypeItems() {
     if (selectedDistrict.value === 'Global') {
         raceLeaderboardGlobalShow.value = true
         raceLeaderboardByDistrictShow.value = false
-        setLeaderboardGlobalItems()
+        await setLeaderboardGlobalItems()
     } else {
         raceLeaderboardByDistrictShow.value = true
         raceLeaderboardGlobalShow.value = false
-        setLeaderboardByDistrictItems()
+        await setLeaderboardByDistrictItems()
     }
 }
 
 async function setLeaderboardByDistrict() {
     if (selectedDistrict.value === 'Global') {
-        setLeaderboardGlobalItems()
+        await setLeaderboardGlobalItems()
     } else {
-        setLeaderboardByDistrictItems()
+        await setLeaderboardByDistrictItems()
     }
 }
 
 async function setLeaderboardByDistrictItems() {
-    raceLeaderboardByDistrictItems.value = races.all_time[selectedDistrict.value][selectedRaceType.value].map((element: any[]) => ({
+    const items = races.all_time[selectedDistrict.value][selectedRaceType.value].map((element: any[]) => ({
         toonName: element[0],
         toonDna: element[1],
         raceTime: element[2]
-    }));
+    }))
+    raceLeaderboardByDistrictItems.value = items
 }
 
 async function setLeaderboardGlobalItems() {
-    raceLeaderboardGlobalItems.value = Object.keys(races.all_time)
+    const items = Object.keys(races.all_time)
         .sort()
         .flatMap(district =>
             (races.all_time[district][selectedRaceType.value] || []).map(
@@ -115,7 +116,8 @@ async function setLeaderboardGlobalItems() {
                     district
                 })
             )
-        );
+        )
+    raceLeaderboardGlobalItems.value = items
 }
 
 
