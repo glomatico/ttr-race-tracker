@@ -20,7 +20,7 @@
                     title: 'Race time',
                     key: 'raceTime',
                 }
-                ]" height="400" :items="raceLeaderboardItems">
+                ]" height="576" :items="raceLeaderboardItems">
                     <template #item="{ item }">
                         <tr>
                             <td class="w-50">
