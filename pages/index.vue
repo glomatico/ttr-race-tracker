@@ -1,38 +1,22 @@
 <template>
-    <v-app>
-        <v-app-bar :title="`Toontown Rewritten Race Tracker`" :color="`#1a5493`">
-        </v-app-bar>
-        <v-main>
-            <v-container>
-                <v-row class="ga-4 my-4">
-                    <v-select class="w-25" :label="`District`" :items="districtItems"
-                        v-model:model-value='selectedDistrict' @update:model-value="onDistrictChange()">
-                    </v-select>
-                    <v-select class="w-25" :label="`Race type`" :disabled="raceTypeDisabled" :items="raceTypeItems"
-                        v-model:model-value='selectedRaceType' @update:model-value="onRaceTypeChange()">
-                    </v-select>
-                </v-row>
-                <div v-if="selectedDistrict === 'Global'">
-                    <RaceLeaderboardGlobal :items="raceLeaderboardGlobalItems">
-                    </RaceLeaderboardGlobal>
-                </div>
-                <div v-else>
-                    <RaceLeaderboardByDistrict :items="raceLeaderboardByDistrictItems">
-                    </RaceLeaderboardByDistrict>
-                </div>
-            </v-container>
-        </v-main>
-        <v-footer :color="`#1a5493`">
-            <v-container>
-                <v-row>
-                    <p>Developed by Glomatico</p>
-                    <v-spacer></v-spacer>
-                    <v-btn :href="`https://github.com/glomatico/ttr-race-tracker`" :target="`_blank`"
-                        :icon="`mdi-github`" class="mx-4" size="medium" variant="plain"></v-btn>
-                </v-row>
-            </v-container>
-        </v-footer>
-    </v-app>
+    <v-container>
+        <v-row class="ga-4 my-4">
+            <v-select class="w-25" :label="`District`" :items="districtItems" v-model:model-value='selectedDistrict'
+                @update:model-value="onDistrictChange()">
+            </v-select>
+            <v-select class="w-25" :label="`Race type`" :disabled="raceTypeDisabled" :items="raceTypeItems"
+                v-model:model-value='selectedRaceType' @update:model-value="onRaceTypeChange()">
+            </v-select>
+        </v-row>
+        <div v-if="selectedDistrict === 'Global'">
+            <RaceLeaderboardGlobal :items="raceLeaderboardGlobalItems">
+            </RaceLeaderboardGlobal>
+        </div>
+        <div v-else>
+            <RaceLeaderboardByDistrict :items="raceLeaderboardByDistrictItems">
+            </RaceLeaderboardByDistrict>
+        </div>
+    </v-container>
 </template>
 
 <script lang="ts" setup>
