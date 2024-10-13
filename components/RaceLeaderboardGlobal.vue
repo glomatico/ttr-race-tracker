@@ -11,7 +11,7 @@
         title: 'Race time',
         key: 'raceTime',
     }
-    ]" :sort-by="[{ key: 'raceTime', order: 'asc' }]" :items="items" v-if="visible">
+    ]" :sort-by="[{ key: 'raceTime', order: 'asc' }]" :items="items">
         <template #item="{ item }">
             <tr>
                 <td>
@@ -33,9 +33,8 @@
 <script lang="ts" setup>
 const props = defineProps<{
     items: any[],
-    visible: boolean,
 }>()
-const { items, visible } = toRefs(props)
+const { items } = toRefs(props)
 </script>
 
 <style></style>

@@ -12,11 +12,14 @@
                         v-model:model-value='selectedRaceType' @update:model-value="onRaceTypeChange()">
                     </v-select>
                 </v-row>
-                <RaceLeaderboardByDistrict :items="raceLeaderboardByDistrictItems"
-                    :visible="raceLeaderboardByDistrictShow">
-                </RaceLeaderboardByDistrict>
-                <RaceLeaderboardGlobal :items="raceLeaderboardGlobalItems" :visible="raceLeaderboardGlobalShow">
-                </RaceLeaderboardGlobal>
+                <div v-if="selectedDistrict === 'Global'">
+                    <RaceLeaderboardGlobal :items="raceLeaderboardGlobalItems">
+                    </RaceLeaderboardGlobal>
+                </div>
+                <div v-else>
+                    <RaceLeaderboardByDistrict :items="raceLeaderboardByDistrictItems">
+                    </RaceLeaderboardByDistrict>
+                </div>
             </v-container>
         </v-main>
         <v-footer :color="`#1a5493`">
@@ -57,9 +60,7 @@ const raceTypeItems = ref<string[]>([
 ])
 const raceTypeDisabled = ref<boolean>(true)
 const raceLeaderboardByDistrictItems = ref<any[]>([])
-const raceLeaderboardByDistrictShow = ref<boolean>(false)
 const raceLeaderboardGlobalItems = ref<any[]>([])
-const raceLeaderboardGlobalShow = ref<boolean>(false)
 const selectedDistrict = ref<string>('')
 const selectedRaceType = ref<string>('')
 
@@ -87,17 +88,13 @@ async function onRaceTypeChange() {
 async function setLeaderboard() {
     if (selectedDistrict.value === 'Global') {
         await setLeaderboardGlobalItems()
-        raceLeaderboardGlobalShow.value = true
-        raceLeaderboardByDistrictShow.value = false
     } else {
         await setLeaderboardByDistrictItems()
-        raceLeaderboardByDistrictShow.value = true
-        raceLeaderboardGlobalShow.value = false
     }
 }
 
 async function setLeaderboardByDistrictItems() {
-    raceLeaderboardByDistrictItems.value = races.all_time[selectedDistrict.value][selectedRaceType.value].map((element: any[]) => ({
+    raceLeaderboardByDistrictItems.value = (races.all_time[selectedDistrict.value][selectedRaceType.value] || []).map((element: any[]) => ({
         toonName: element[0],
         toonDna: element[1],
         raceTime: element[2]
