@@ -5,35 +5,17 @@
         <v-main>
             <v-container>
                 <v-row class="ga-4 my-4">
-                    <v-select class="w-25" :label="`District`" :items="districtsData"
-                        v-model:model-value='selectedDistrict' @update:model-value="setRaceTypesData()">
+                    <v-select class="w-25" :label="`District`" :items="districtItems"
+                        v-model:model-value='selectedDistrict' @update:model-value="setRaceTypeItems()">
                     </v-select>
-                    <v-select class="w-25" :label="`Race type`" :disabled="raceTypesDisabled" :items="raceTypesData"
-                        v-model:model-value='selectedRaceType' @update:model-value="setLeaderboardTableItems()">
+                    <v-select class="w-25" :label="`Race type`" :disabled="raceTypeDisabled" :items="raceTypeItems"
+                        v-model:model-value='selectedRaceType' @update:model-value="setLeaderboardByDistrict()">
                     </v-select>
                 </v-row>
-                <v-data-table-virtual :headers="[{
-                    title: 'Toon name',
-                    key: 'toonName',
-                },
-                {
-                    title: 'Race time',
-                    key: 'raceTime',
-                }
-                ]" height="576" :items="raceLeaderboardItems">
-                    <template #item="{ item }">
-                        <tr>
-                            <td class="w-50">
-                                <v-avatar>
-                                    <v-img
-                                        :src="`https://rendition.toontownrewritten.com/render/${item.toonDna}/portrait/128x128.webp`"></v-img>
-                                </v-avatar>
-                                {{ item.toonName }}
-                            </td>
-                            <td class="w-25">{{ getFormattedRaceTime(item.raceTime) }}</td>
-                        </tr>
-                    </template>
-                </v-data-table-virtual>
+                <RaceLeaderboardByDistrict :race-leaderboard-by-district-items="raceLeaderboardByDistrictItems"
+                    :race-leaderboard-by-district-show="raceLeaderboardByDistrictShow"></RaceLeaderboardByDistrict>
+                <RaceLeaderboardGlobal :race-leaderboard-by-district-items="raceLeaderboardGlobalItems"
+                    :race-leaderboard-by-district-show="raceLeaderboardGlobalShow"></RaceLeaderboardGlobal>
             </v-container>
         </v-main>
         <v-footer :color="`#1a5493`">
@@ -57,10 +39,26 @@ useSeoMeta({
     ogDescription: 'A website to track Toontown Rewritten racing scores.',
     author: 'Glomatico',
 })
-const districtsData = ref<string[]>([])
-const raceTypesData = ref<string[]>([])
-const raceTypesDisabled = ref<boolean>(true)
-const raceLeaderboardItems = ref<any[]>([])
+const districtItems = ref<string[]>(['Global'])
+const raceTypeItems = ref<string[]>([
+    'Airborne Acres',
+    'Airborne Acres Rev',
+    'Blizzard Boulevard',
+    'Blizzard Boulevard Rev',
+    'City Circuit',
+    'City Circuit Rev',
+    'Corkscrew Coliseum',
+    'Corkscrew Coliseum Rev',
+    'Rustic Raceway',
+    'Rustic Raceway Rev',
+    'Screwball Stadium',
+    'Screwball Stadium Rev'
+])
+const raceTypeDisabled = ref<boolean>(true)
+const raceLeaderboardByDistrictItems = ref<any[]>([])
+const raceLeaderboardByDistrictShow = ref<boolean>(false)
+const raceLeaderboardGlobalItems = ref<any[]>([])
+const raceLeaderboardGlobalShow = ref<boolean>(false)
 const selectedDistrict = ref<string>('')
 const selectedRaceType = ref<string>('')
 
@@ -71,36 +69,60 @@ async function setRaces() {
     races = await response.json()
 }
 
-async function setDistrictsData() {
-    districtsData.value = Object.keys(races.all_time).sort()
+async function setDistrictItems() {
+    districtItems.value.push(...Object.keys(races.all_time).sort())
 }
 
-async function setRaceTypesData() {
-    raceTypesData.value = Object.keys(races.all_time[selectedDistrict.value]).sort()
-    raceTypesDisabled.value = false
-    selectedRaceType.value = raceTypesData.value[0]
-    setLeaderboardTableItems()
+async function setRaceTypeItems() {
+    selectedRaceType.value = raceTypeItems.value[0]
+    raceTypeDisabled.value = false
+    if (selectedDistrict.value === 'Global') {
+        raceLeaderboardGlobalShow.value = true
+        raceLeaderboardByDistrictShow.value = false
+        setLeaderboardGlobalItems()
+    } else {
+        raceLeaderboardByDistrictShow.value = true
+        raceLeaderboardGlobalShow.value = false
+        setLeaderboardByDistrictItems()
+    }
 }
 
-async function setLeaderboardTableItems() {
-    raceLeaderboardItems.value = races.all_time[selectedDistrict.value][selectedRaceType.value].map((element: any[]) => ({
+async function setLeaderboardByDistrict() {
+    if (selectedDistrict.value === 'Global') {
+        setLeaderboardGlobalItems()
+    } else {
+        setLeaderboardByDistrictItems()
+    }
+}
+
+async function setLeaderboardByDistrictItems() {
+    raceLeaderboardByDistrictItems.value = races.all_time[selectedDistrict.value][selectedRaceType.value].map((element: any[]) => ({
         toonName: element[0],
         toonDna: element[1],
         raceTime: element[2]
     }));
 }
 
-function getFormattedRaceTime(raceTime: number) {
-    const date = new Date(raceTime * 1000)
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0')
-    const seconds = date.getUTCSeconds().toString().padStart(2, '0')
-    const milliseconds = date.getUTCMilliseconds().toString().padStart(3, '0')
-    return `${minutes}:${seconds}.${milliseconds}`
+async function setLeaderboardGlobalItems() {
+    raceLeaderboardGlobalItems.value = Object.keys(races.all_time)
+        .sort()
+        .flatMap(district =>
+            (races.all_time[district][selectedRaceType.value] || []).map(
+                ([toonName, toonDna, raceTime]: [string, string, number]) => ({
+                    toonName,
+                    toonDna,
+                    raceTime,
+                    district
+                })
+            )
+        );
 }
+
+
 
 onMounted(async () => {
     await setRaces()
-    await setDistrictsData()
+    await setDistrictItems()
 })
 </script>
 
