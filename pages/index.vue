@@ -62,6 +62,8 @@ async function setRaces() {
     const response = await fetch('https://toontownrewritten.com/api/racing')
     races.value = await response.json()
     districtsDisabled.value = false
+    raceTypeDisabled.value = false
+    selectedRaceType.value = raceTypeItems.value[0]
 }
 
 async function setDistrictItems() {
@@ -69,8 +71,6 @@ async function setDistrictItems() {
 }
 
 async function onDistrictChange() {
-    raceTypeDisabled.value = false
-    selectedRaceType.value = raceTypeItems.value[0]
     await setLeaderboard()
 }
 
