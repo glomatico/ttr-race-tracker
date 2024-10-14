@@ -4,5 +4,4 @@ export const getFormattedRaceTime = (raceTime: number) => {
   const seconds = date.getUTCSeconds().toString().padStart(2, '0')
   const milliseconds = date.getUTCMilliseconds().toString().padStart(3, '0')
   return `${minutes}:${seconds}.${milliseconds}`
-
 }
