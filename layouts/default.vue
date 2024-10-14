@@ -1,7 +1,7 @@
 <template>
     <v-app>
-        <v-app-bar :title="`Toontown Rewritten Race Tracker`" :color="`#1a5493`">
-        </v-app-bar>
+        <v-toolbar :title="`Toontown Rewritten Race Tracker`" :color="`#1a5493`">
+        </v-toolbar>
         <v-main>
             <slot />
         </v-main>
