@@ -1,6 +1,9 @@
 <template>
     <v-app>
-        <v-toolbar :title="`Toontown Rewritten Race Tracker`" :color="`#1a5493`">
+        <v-toolbar :color="`#1a5493`">
+            <v-container>
+                <v-toolbar-title>Toontown Rewritten Race Tracker</v-toolbar-title>
+            </v-container>
         </v-toolbar>
         <v-main>
             <slot />
